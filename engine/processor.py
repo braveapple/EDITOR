@@ -39,7 +39,8 @@ def do_train(cfg,
     logger = logging.getLogger("EDITOR.train")
     logger.info('start training')
     # Create SummaryWriter
-    writer = SummaryWriter('/13994058190/WYH/EDITOR_PB/runs/{}'.format(cfg.OUTPUT_DIR.split('/')[-1]))
+    # writer = SummaryWriter('/13994058190/WYH/EDITOR_PB/runs/{}'.format(cfg.OUTPUT_DIR.split('/')[-1]))
+    writer = SummaryWriter(cfg.OUTPUT_DIR)
 
     _LOCAL_PROCESS_GROUP = None
     if device:

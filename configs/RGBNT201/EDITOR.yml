@@ -1,7 +1,7 @@
 MODEL:
   PRETRAIN_CHOICE: 'imagenet'
   MIX_DIM: 768
-  PRETRAIN_PATH_T: 'your_pretrain_model_path'
+  PRETRAIN_PATH_T: '/mnt/disk/wpy_data/checkpoints/TOP-ReID/vitb_16_224_21k.pth'
   TRANSFORMER_TYPE: 'vit_base_patch16_224'
   STRIDE_SIZE: [ 16, 16 ]
   SIE_CAMERA: True
@@ -17,7 +17,7 @@ INPUT:
   PADDING: 10
 DATASETS:
   NAMES: ('RGBNT201')
-  ROOT_DIR: 'your_dataset_path'
+  ROOT_DIR: '/mnt/disk/wpy_data/dataset/multi_modality_object_reidentification/RGBNT201'
 DATALOADER:
   SAMPLER: 'softmax_triplet'
   NUM_INSTANCE: 16
@@ -33,7 +33,4 @@ TEST:
   WEIGHT: ''
   NECK_FEAT: 'before'
   FEAT_NORM: 'yes'
-OUTPUT_DIR: './EDITOR'
-
-
-
+OUTPUT_DIR: '/mnt/disk/wpy_data/experiments/EDITOR/RGBNT201'
