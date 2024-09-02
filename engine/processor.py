@@ -114,9 +114,12 @@ def do_train(cfg,
 
         end_time = time.time()
         time_per_batch = (end_time - start_time) / (n_iter + 1)
-
-        logger.info("Epoch {} done. Time per batch: {:.3f}[s] Speed: {:.1f}[samples/s]"
-                        .format(epoch, time_per_batch, train_loader.batch_size / time_per_batch))
+        
+        if cfg.MODEL.DIST_TRAIN:
+            pass
+        else:
+            logger.info("Epoch {} done. Time per batch: {:.3f}[s] Speed: {:.1f}[samples/s]"
+                    .format(epoch, time_per_batch, train_loader.batch_size / time_per_batch))
 
         if epoch % checkpoint_period == 0:
             if cfg.MODEL.DIST_TRAIN:
@@ -132,7 +135,7 @@ def do_train(cfg,
                 if dist.get_rank() == 0:
                     model.eval()
                     print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-                    print('!!!Mutil-Modal Testing!!!')
+                    print('!!!Mutil-Modal Testing!!! => {}'.format(cfg.DATASETS.NAMES))
                     for n_iter, (img, vid, camid, camids, target_view, _) in enumerate(val_loader):
                         with torch.no_grad():
                             img = {'RGB': img['RGB'].to(device),
@@ -149,7 +152,7 @@ def do_train(cfg,
 
                     # 计算多模态性能
                     cmc, mAP, _, _, _, _, _ = evaluator_m.compute(cfg)
-                    logger.info("Validation Results - Epoch: {}".format(epoch))
+                    logger.info("Validation Results of - Epoch: {}".format(epoch))
                     logger.info("mAP: {:.2%}".format(mAP))
                     for r in [1, 5, 10]:
                         logger.info("CMC curve, Rank-{:<3}:{:.2%}".format(r, cmc[r - 1]))
@@ -172,7 +175,7 @@ def do_train(cfg,
             else:
                 model.eval()
                 print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-                print('!!!Mutil-Modal Testing!!!')
+                print('!!!Mutil-Modal Testing!!! => {}'.format(cfg.DATASETS.NAMES))
                 for n_iter, (img, vid, camid, camids, target_view, _) in enumerate(val_loader):
                     with torch.no_grad():
                         img = {'RGB': img['RGB'].to(device),
@@ -234,7 +237,7 @@ def do_inference(cfg,
         if dist.get_rank() == 0:
             model.eval()
             print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            print('!!!Mutil-Modal Testing!!!')
+            print('!!!Mutil-Modal Testing!!! => {}'.format(cfg.DATASETS.NAMES))
             for n_iter, (img, vid, camid, camids, target_view, _) in enumerate(val_loader):
                 with torch.no_grad():
                     img = {'RGB': img['RGB'].to(device),
@@ -254,7 +257,7 @@ def do_inference(cfg,
     else:
         model.eval()
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-        print('!!!Mutil-Modal Testing!!!')
+        print('!!!Mutil-Modal Testing!!! => {}'.format(cfg.DATASETS.NAMES))
         for n_iter, (img, vid, camid, camids, target_view, _) in enumerate(val_loader):
             with torch.no_grad():
                 img = {'RGB': img['RGB'].to(device),

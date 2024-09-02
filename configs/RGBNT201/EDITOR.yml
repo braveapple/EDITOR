@@ -17,7 +17,7 @@ INPUT:
   PADDING: 10
 DATASETS:
   NAMES: ('RGBNT201')
-  ROOT_DIR: '/mnt/disk/wpy_data/dataset/multi_modality_object_reidentification/RGBNT201'
+  ROOT_DIR: '/mnt/disk/wpy_data/dataset/multi_modality_object_reidentification'
 DATALOADER:
   SAMPLER: 'softmax_triplet'
   NUM_INSTANCE: 16
